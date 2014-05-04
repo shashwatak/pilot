@@ -16,13 +16,12 @@ class CsvLogger(Logger):
         self.file = open(self.file_path, 'w+')
         self.write_headers()
 
-    def log(self, state, action, prediction):
+    def log(self, state, prediction):
         if not self.is_valid:
             return
 
         self.file.write(list_to_csv(
             dict_to_list(state, self.keys['state']) +
-            dict_to_list(action, self.keys['action']) +
             prediction.values()
         ))
 

@@ -3,47 +3,31 @@ from core.world import World
 import random
 
 
-class CopterWorld(World):
+class SatelliteWorld(World):
 
     def __init__(self, config):
-        self.phi_noise_level = config['phi_noise']
-        self.theta_noise_level = config['theta_noise']
         World.__init__(self, config)
 
-    def setInitY(self, init_y):
-        self.init_state['y'] = init_y
-        self.state['y'] = init_y
+    def setInitPhi(self, init_phi):
+        self.init_state['phi'] = init_phi
+        self.state['phi'] = init_phi
 
-    def peek(self, action):
+    def peek(self):
          # set parameters of copter
         dt = self.dt
-        sy = self.boundSpeedInput(action['speed_y'])  # speed input
 
         s = self.state
 
-        s_noise = self.speed_noise_level * uniform_noise()
-        a_noise = self.altitude_noise_level * uniform_noise()
-
-        y, dy, ydot = s['y'], s['dy'], s['ydot']
-
-        # integrate
-        ydot = sy + s_noise
-        dy = ydot * dt
-        y = y + dy + a_noise
+        phi = s['phi']
 
         return {
-            'y': y,
-            'dy': dy,
-            'ydot': ydot,
+            'phi': phi
         }
 
-    def tick(self, action):
-        self.state = self.peek(action)
+    def tick(self):
+        self.state = self.peek()
         return self.state
 
-    def boundSpeedInput(self, sy):
-        return max(self.sy_min, min(self.sy_max, sy))
 
-
-def uniform_noise():
-    return (2.0 * random.random() - 1.0)
+# def uniform_noise():
+#     return (2.0 * random.random() - 1.0)

@@ -39,27 +39,20 @@ MODEL_PARAMS = {
             #
             # (value generated from DS_ENCODER_SCHEMA)
             'encoders': {
-                'dy': {
-                    'fieldname': u'dy',
-                    'name': u'dy',
+                'phi': {
+                    'fieldname': u'phi',
+                    'name': u'phi',
                     'type': 'AdaptiveScalarEncoder',
                     'n': 151,
-                    'w': 3
+                    'w': 41
                 },
-                'ydot': {
-                    'fieldname': u'ydot',
-                    'name': u'ydot',
-                    'type': 'AdaptiveScalarEncoder',
-                    'n': 151,
-                    'w': 11
-                },
-                'force_y': {
-                    'fieldname': u'force_y',
-                    'name': u'force_y',
-                    'type': 'AdaptiveScalarEncoder',
-                    'n': 151,
-                    'w': 21
-                }
+                # 'theta': {
+                #     'fieldname': u'theta',
+                #     'name': u'theta',
+                #     'type': 'AdaptiveScalarEncoder',
+                #     'n': 151,
+                #     'w': 3
+                # }
             },
 
             # A dictionary specifying the period for automatically-generated
@@ -232,6 +225,6 @@ MODEL_PARAMS = {
         'trainSPNetOnlyIfRequested': False,
     },
 
-    'predictedField': 'dy',
+    'predictedField': 'phi',
     'predictionSteps': [1]  # should be same as clParam's steps
 }

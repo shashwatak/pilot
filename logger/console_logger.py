@@ -4,9 +4,8 @@ from termcolor import colored
 
 class ConsoleLogger(Logger):
 
-    def log(self, state, action, prediction):
-        print colored("[observed]  y: " + self.to_str(state['y']) + "\t" + "ydot: " + self.to_str(state['ydot']) + "\t" + "control speed_y: " + self.to_str(action['speed_y']), 'green')
-        print colored("[predicted]" + "\t\t\t\t" + "control speed_y: " + self.to_str(prediction.values()[0]), 'red')
+    def log(self, state, prediction):
+        print colored("[predicted]" + "\t\t\t\t" + "phi: " + self.to_str(prediction.values()[0]), 'red')
 
     """ Helpers """
 

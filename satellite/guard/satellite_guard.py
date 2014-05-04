@@ -1,7 +1,7 @@
 from core.guard import Guard
 
 
-class CopterGuard(Guard):
+class SatelliteGuard(Guard):
 
-    def check(self, state, action):
+    def check(self, state):
         return True

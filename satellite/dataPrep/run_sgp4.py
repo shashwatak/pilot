@@ -16,7 +16,7 @@ theta_csv_writer = csv.writer(theta_file)
 
 def main():
     tle_list = []
-    with open('data/zarya_tle', 'rb') as tlefile:
+    with open('tle_data/zarya_tle', 'rb') as tlefile:
         for _ in range(50):
             line1 = tlefile.readline()
             line2 = tlefile.readline()

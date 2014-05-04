@@ -18,7 +18,7 @@ class Predictor:
     def getModelParams(self):
         print "getModelParams needs to be overridden"
 
-    def modelInputFromStateAndAction(self, state, action):
+    def modelInputFromStateAndAction(self, state):
         return {}
 
     # Optional, only for predictors whose predicted field is a state field
@@ -27,15 +27,15 @@ class Predictor:
 
     """ Public """
 
-    def learn(self, state, action):
-        input = self.modelInputFromStateAndAction(state, action)
+    def learn(self, state):
+        input = self.modelInputFromStateAndAction(state)
         result = self.model.run(input)
         prediction = self.predictionFromModelResult(result)
         self.last_prediction = prediction
         return prediction
 
-    def predict(self, state, action):
-        input = self.modelInputFromStateAndAction(state, action)
+    def predict(self, state):
+        input = self.modelInputFromStateAndAction(state)
 
         self.disableLearning()
         result = self.model.run(input)
@@ -45,9 +45,9 @@ class Predictor:
         self.last_prediction = prediction
         return prediction
 
-    def imagine(self, state, action_list):
-       
-        def predict_closure(input_list):    
+    def imagine(self, state):
+
+        def predict_closure(input_list):
             def predict(model_fork):
                 model_fork.disableLearning()
                 results = []
@@ -56,15 +56,15 @@ class Predictor:
                     results.append(result)
                 return results
             return predict
-            
-        
+
+
         # apply the function for each action
-        funcs = [predict_closure([self.modelInputFromStateAndAction(state, action)]) for action in action_list]
+        funcs = [predict_closure([self.modelInputFromStateAndAction(state)]) for action in action_list]
         results = self.imagination.imagine(funcs)
         predictions = [self.predictionFromModelResult(result[0]) for result in results]
-        
+
         return predictions
-        
+
     def enableLearning(self):
         self.is_learning_enabled = True
         self.model.enableLearning()

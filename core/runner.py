@@ -1,16 +1,11 @@
 class Runner:
 
-    def __init__(self, config, world, predictor, controller, guard=None, learning_enabled=False, target_y=0., final_target_y=None):
+    def __init__(self, config, world, predictor, guard=None, learning_enabled=False):
         self.config = config
         self.world = world
         self.predictor = predictor
-        self.controller = controller
         self.guard = guard
         self.learning_enabled = learning_enabled
-        self.target_y = target_y
-        self.final_target_y = final_target_y
-
-        self.setTarget(self.target_y)
 
         self.loggers = []
 
@@ -20,11 +15,6 @@ class Runner:
 
     """ Public """
 
-    def setTarget(self, target):
-        print "Setting target to: " + str(target)
-        self.controller.setTarget(target)
-        self.predictor.setTarget(target)
-
     def tick(self):
         if self.disabled:
             return
@@ -32,47 +22,34 @@ class Runner:
         self.i += 1
         state = self.world.observe()
 
-        if self.midwayThroughRun() and self.final_target_y != None:
-            self.resetPredictor()
-            self.setTarget(self.final_target_y)
 
-        if self.shouldBeginNewRun(state):
-            self.checkpointPredictor()
-            self.reset()
-
-            self.setTarget(self.target_y)
-            self.newRun()
-            return
-
-        action = self.controller.act(state, self.predictor)
-
-        if not self.sanityCheck(state, action):
+        if not self.sanityCheck(state):
             self.world.terminate()
             self.disabled = True
             return
 
-        prediction = self.runPredictor(state, action)
+        prediction = self.runPredictor(state)
 
-        self.world.tick(action)
+        self.world.tick()
 
-        self.log(state, action, prediction)
+        self.log(state, prediction)
 
-    def sanityCheck(self, state, action):
+    def sanityCheck(self, state):
         if not self.guard:
             return True
 
-        return self.guard.check(state, action)
+        return self.guard.check(state)
 
     def checkpointPredictor(self):
         if self.learning_enabled:
             print "Checkpointing predictor... DO NOT KILL DURING THIS TIME"
             self.predictor.checkpoint()
 
-    def runPredictor(self, state, action):
+    def runPredictor(self, state):
         if self.learning_enabled:
-            return self.predictor.learn(state, action)
+            return self.predictor.learn(state)
         else:
-            return self.predictor.predict(state, action)
+            return self.predictor.predict(state)
 
     def newRun(self):
         self.run += 1
@@ -98,8 +75,7 @@ class Runner:
     def initPredictor(self):
         print "Initializing predictor..."
         state = self.world.observe()
-        action = self.controller.noop()
-        prediction = self.runPredictor(state, action)
+        prediction = self.runPredictor(state)
 
     def resetPredictor(self):
         print "Resetting predictor..."
@@ -109,11 +85,10 @@ class Runner:
         print "Resetting..."
         self.world.resetState()
         self.resetPredictor()
-        self.controller.resetState()
 
-    def log(self, state, action, prediction):
+    def log(self, state, prediction):
         for logger in self.loggers:
-            logger.log(state, action, prediction)
+            logger.log(state, prediction)
 
     def shouldBeginNewRun(self, state):
         if self.i and (self.i % self.config['iterations_per_run'] == 0):
