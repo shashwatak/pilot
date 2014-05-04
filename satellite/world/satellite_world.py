@@ -6,11 +6,8 @@ import random
 class CopterWorld(World):
 
     def __init__(self, config):
-        self.speed_noise_level = config['speed_noise']
-        self.altitude_noise_level = config['altitude_noise']
-        self.sy_min = config['sy_min']
-        self.sy_max = config['sy_max']
-        self.last_sy = 0.0
+        self.phi_noise_level = config['phi_noise']
+        self.theta_noise_level = config['theta_noise']
         World.__init__(self, config)
 
     def setInitY(self, init_y):
