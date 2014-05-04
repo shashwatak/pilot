@@ -76,11 +76,19 @@ control = {
     # Input stream specification per py/nupic/cluster/database/StreamDef.json.
     #
     'dataset': {
+<<<<<<< HEAD
         u'info': u'test_copter',
         u'streams': [{u'columns': [u'*'],
                       u'info': u'copter.csv',
                       u'last_record': config['numRecords'],
                       u'source': u'file://pilot/copter.csv'}],
+=======
+        u'info': u'test_satellite',
+        u'streams': [{u'columns': [u'*'],
+                      u'info': u'phi.csv',
+                      u'last_record': config['numRecords'],
+                      u'source': u'file://pilot/phi.csv'}],
+>>>>>>> 841f328a83aa529e87f33ee52685998b00031e1d
         'aggregation': config['aggregationInfo'],
         u'version': 1},
 
